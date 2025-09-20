@@ -1,0 +1,20 @@
+name: Build and Deploy # 工作流名称
+on: # 触发条件
+  push: # 当推送代码到指定分支时触发
+    branches:
+      - main  # 可以是 master 或其他你想要监听的分支
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest # 运行环境
+    steps:
+      - name: Checkout # 步骤1: 检出代码
+        uses: actions/checkout@v4 # 使用官方 checkout action
+      - name: Install and Build # 步骤2: 安装依赖并构建
+        run: |
+          npm install
+          npm run build
+      - name: Deploy # 步骤3: 部署到 GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3 # 使用社区流行的部署 action
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # 使用 GitHub 自动生成的令牌
+          publish_dir: ./dist # 指定要部署的构建输出目录
